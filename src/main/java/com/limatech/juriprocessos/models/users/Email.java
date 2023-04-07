@@ -1,6 +1,6 @@
 package com.limatech.juriprocessos.models.users;
 
-import com.limatech.juriprocessos.exceptions.users.InvalidProperty;
+import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 
 import java.util.regex.Pattern;
 
@@ -17,15 +17,9 @@ public class Email extends UserProperty{
     }
 
     public void setAddress(String address) {
-        if(hasExceededLength(address)) {
-            throw new InvalidProperty("Email address must have no more than "+ getMaxLength()+" characters");
-        }
+        validate(address);
 
-        if (validate(address)) {
-            this.address = address;
-        } else {
-            throw new InvalidProperty("Invalid email address");
-        }
+        this.address = address;
     }
 
     @Override
@@ -33,7 +27,15 @@ public class Email extends UserProperty{
         return address;
     }
 
-    private boolean validate(String email) {
+    private void validate(String email) {
+        if(hasExceededLength(email)) {
+            throw new InvalidPropertyException("Email address must have no more than "+ getMaxLength()+" characters");
+        }
+
+        if(hasLength(email)) {
+            throw new InvalidPropertyException("Email must have at least " + getMinLength() + " characters");
+        }
+
         // Regular expression pattern to validate email addresses
         String regex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
                 "[a-zA-Z0-9_+&*-]+)*@" +
@@ -44,6 +46,8 @@ public class Email extends UserProperty{
         Pattern pattern = Pattern.compile(regex);
 
         // Check if the email matches the pattern
-        return pattern.matcher(email).matches();
+        if(!pattern.matcher(email).matches()) {
+            throw new InvalidPropertyException("Invalid email address");
+        }
     }
 }

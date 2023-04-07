@@ -7,17 +7,24 @@ import com.limatech.juriprocessos.models.users.Username;
 import jakarta.validation.constraints.NotEmpty;
 
 public class CreateUserDTO {
-    @NotEmpty
+
     private Username username;
 
-    @NotEmpty
+
     private Name name;
 
-    @NotEmpty
+
     private Email email;
 
-    @NotEmpty
+
     private String password;
+
+    public CreateUserDTO(String username, String name, String email, String password) {
+        this.username = new Username(username);
+        this.name = new Name(name);
+        this.email = new Email(email);
+        this.password = password;
+    }
 
     public String getUsername() {
 

@@ -1,6 +1,6 @@
 package com.limatech.juriprocessos.models.users;
 
-import com.limatech.juriprocessos.exceptions.users.InvalidProperty;
+import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 
 public class Name extends UserProperty{
 
@@ -16,10 +16,18 @@ public class Name extends UserProperty{
     }
 
     public void setName(String name) {
-        if(hasExceededLength(name)) {
-            throw new InvalidProperty("Name must have no more than "+ getMaxLength()+" characters");
-        }
+        validate(name);
 
         this.name = name;
+    }
+
+    public void validate(String value) {
+        if(hasLength(value)) {
+            throw new InvalidPropertyException("Name must have at least " + getMinLength() + " characters");
+        }
+
+        if(hasExceededLength(value)) {
+            throw new InvalidPropertyException("Name must have no more than "+ getMaxLength()+" characters");
+        }
     }
 }

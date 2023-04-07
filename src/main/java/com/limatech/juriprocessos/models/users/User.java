@@ -30,10 +30,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Process> processes;
 
-    public User() {
-
-    }
-
     public UUID getId() {
         return id;
     }
@@ -75,5 +71,9 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User() {
+
     }
 }
