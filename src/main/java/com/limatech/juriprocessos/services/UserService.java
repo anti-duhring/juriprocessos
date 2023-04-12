@@ -14,8 +14,13 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    @Autowired
+
     private UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User createUser(CreateUserDTO userDTO) {
         validateIfUserAlreadyExists(userDTO);
@@ -25,7 +30,26 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    public User updateUser(UUID id, CreateUserDTO userDTO) {
+        validateIfUserAlreadyExists(userDTO);
+
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not " +
+                "found"));
+        if(userDTO.getUsername() != null) {
+            user.setName(userDTO.getName());
+        }
+        if(userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail());
+        }
+        if (userDTO.getName() != null) {
+            user.setName(userDTO.getName());
+        }
+
+        return userRepository.save(user);
+    }
+
     public void deleteUser(UUID id) {
+
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + "not " +
                 "found"));
 
@@ -43,4 +67,5 @@ public class UserService {
             throw new UserAlreadyExistsException("Username already exists");
         }
     }
+
 }
