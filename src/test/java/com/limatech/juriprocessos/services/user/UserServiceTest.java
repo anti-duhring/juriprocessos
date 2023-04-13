@@ -16,11 +16,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.when;
 
@@ -133,7 +134,7 @@ class UserServiceTest {
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 
         // then
-        userService.updateUser(user.getId(), userUpdatedDTO);
+        User userReturned = userService.updateUser(user.getId(), userUpdatedDTO);
         Mockito.verify(userRepository).save(Mockito.any(User.class));
 
     }
@@ -156,6 +157,47 @@ class UserServiceTest {
         // then
         assertThrows(UserNotFoundException.class, () -> userService.updateUser(userUpdated.getId(), userUpdatedDTO));
 
+    }
+
+    @Test
+    void shouldCallSaveUserWhenCreateANewUser() {
+        // given
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService(userRepository);
+
+        CreateUserDTO userDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+        User user = userDTO.toUserEntity();
+
+        // when
+        when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+
+        // then
+        userService.createUser(userDTO);
+        Mockito.verify(userRepository).save(Mockito.any(User.class));
+    }
+
+    @Test
+    void shouldCallFindByIdWhenGettingAUser() {
+        // given
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService(userRepository);
+
+        CreateUserDTO userDTOOne = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+        CreateUserDTO userDTOTwo = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
+
+        User userOne = userDTOOne.toUserEntity();
+        User userTwo = userDTOTwo.toUserEntity();
+
+        List<User> users = new ArrayList<User>();
+        users.add(userOne);
+        users.add(userTwo);
+
+        // when
+        when(userRepository.findAll()).thenReturn(users);
+
+        // then
+        List<User> getAll = userService.getAll();
+        assertEquals(users, getAll);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.limatech.juriprocessos.models.process;
 
+import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 import com.limatech.juriprocessos.models.users.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
