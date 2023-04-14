@@ -14,7 +14,7 @@ public class Process {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID uuid;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -30,20 +30,26 @@ public class Process {
     @NotEmpty
     private String court;
 
-    public Process(User user, String identifier, String uf, String court) {
+    @NotEmpty
+    private String degree;
+
+    public Process(User user, String identifier, String uf, String court, String degree) {
         this.user = user;
         this.identifier = identifier;
         this.uf = uf;
         this.court = court;
+        this.degree = degree;
     }
 
     public Process() {
 
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getId() {
+        return id;
     }
+
+    public void setId(UUID id) { this.id = id; }
 
     public User getUser() {
         return user;
@@ -75,5 +81,9 @@ public class Process {
 
     public void setCourt(String court) {
         this.court = court;
+    }
+
+    public String getDegree() {
+        return degree;
     }
 }
