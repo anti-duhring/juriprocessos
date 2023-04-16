@@ -37,7 +37,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not " +
                 "found"));
         if(userDTO.getUsername() != null) {
-            user.setName(userDTO.getName());
+            user.setUsername(userDTO.getUsername());
         }
         if(userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail());

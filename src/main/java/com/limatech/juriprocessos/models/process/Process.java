@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,6 +21,9 @@ public class Process {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "process", cascade = CascadeType.ALL,  orphanRemoval = true)
+    private List<Activity> activities;
+
     @NotEmpty
     private String identifier;
 
@@ -31,14 +35,25 @@ public class Process {
     private String court;
 
     @NotEmpty
+    private String vara;
+
+    @NotEmpty
     private String degree;
 
-    public Process(User user, String identifier, String uf, String court, String degree) {
+    public Process(
+            User user,
+            String identifier,
+            String uf,
+            String court,
+            String degree,
+            String vara
+    ) {
         this.user = user;
         this.identifier = identifier;
         this.uf = uf;
         this.court = court;
         this.degree = degree;
+        this.vara = vara;
     }
 
     public Process() {
@@ -85,5 +100,18 @@ public class Process {
 
     public String getDegree() {
         return degree;
+    }
+
+    public  void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+
+    public String getVara() {
+        return vara;
+    }
+
+    public void setVara(String vara) {
+        this.vara = vara;
     }
 }
