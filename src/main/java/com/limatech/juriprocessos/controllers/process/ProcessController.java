@@ -41,4 +41,12 @@ public class ProcessController {
         processService.deleteProcess(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity getProcess(
+            @PathVariable UUID id
+    ) {
+        Process process = processService.getProcess(id);
+        return ResponseEntity.ok(process);
+    }
 }

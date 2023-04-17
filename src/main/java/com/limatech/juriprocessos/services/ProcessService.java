@@ -60,7 +60,7 @@ public class ProcessService {
         return processRepository.save(process);
     }
 
-    public Process findProcessById(UUID id) {
+    public Process getProcess(UUID id) {
         return processRepository.findById(id).orElseThrow(() -> new ProcessNotFoundException("Process not found"));
     }
 }

@@ -1,4 +1,4 @@
-package com.limatech.juriprocessos.services.user;
+package com.limatech.juriprocessos.services;
 
 import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
 import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
@@ -6,15 +6,10 @@ import com.limatech.juriprocessos.exceptions.users.UserAlreadyExistsException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
 import com.limatech.juriprocessos.models.users.User;
 import com.limatech.juriprocessos.repository.users.UserRepository;
-import com.limatech.juriprocessos.services.UserService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +17,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.when;
 
 class UserServiceTest {
@@ -101,7 +95,7 @@ class UserServiceTest {
         UserService userService = new UserService(userRepository);
 
         CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
-        User user = userDTO.toUserEntity();
+        User user = userDTO.toEntity();
         UUID id = UUID.randomUUID();
 
         user.setId(id);
@@ -124,8 +118,8 @@ class UserServiceTest {
         CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
         CreateUserDTO userUpdatedDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
 
-        User user = userDTO.toUserEntity();
-        User userUpdated = userUpdatedDTO.toUserEntity();
+        User user = userDTO.toEntity();
+        User userUpdated = userUpdatedDTO.toEntity();
         UUID id = UUID.randomUUID();
         user.setId(id);
         userUpdated.setId(id);
@@ -147,7 +141,7 @@ class UserServiceTest {
 
         CreateUserDTO userUpdatedDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
 
-        User userUpdated = userUpdatedDTO.toUserEntity();
+        User userUpdated = userUpdatedDTO.toEntity();
         UUID id = UUID.randomUUID();
         userUpdated.setId(id);
 
@@ -166,7 +160,7 @@ class UserServiceTest {
         UserService userService = new UserService(userRepository);
 
         CreateUserDTO userDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
-        User user = userDTO.toUserEntity();
+        User user = userDTO.toEntity();
 
         // when
         when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
@@ -185,8 +179,8 @@ class UserServiceTest {
         CreateUserDTO userDTOOne = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
         CreateUserDTO userDTOTwo = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
 
-        User userOne = userDTOOne.toUserEntity();
-        User userTwo = userDTOTwo.toUserEntity();
+        User userOne = userDTOOne.toEntity();
+        User userTwo = userDTOTwo.toEntity();
 
         List<User> users = new ArrayList<User>();
         users.add(userOne);

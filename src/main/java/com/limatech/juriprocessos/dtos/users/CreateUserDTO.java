@@ -4,7 +4,6 @@ import com.limatech.juriprocessos.models.users.Email;
 import com.limatech.juriprocessos.models.users.Name;
 import com.limatech.juriprocessos.models.users.User;
 import com.limatech.juriprocessos.models.users.Username;
-import jakarta.validation.constraints.NotEmpty;
 
 public class CreateUserDTO {
 
@@ -64,7 +63,7 @@ public class CreateUserDTO {
         this.password = password;
     }
 
-    public User toUserEntity() {
+    public User toEntity() {
 
         return new User(username.getName(), name.getName(), email.getAddress(), password);
     }

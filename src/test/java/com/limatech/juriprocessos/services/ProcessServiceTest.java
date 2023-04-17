@@ -1,4 +1,4 @@
-package com.limatech.juriprocessos.services.process;
+package com.limatech.juriprocessos.services;
 
 import com.limatech.juriprocessos.dtos.process.CreateProcessDTO;
 import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
@@ -7,11 +7,9 @@ import com.limatech.juriprocessos.models.process.Process;
 import com.limatech.juriprocessos.models.users.User;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import com.limatech.juriprocessos.repository.users.UserRepository;
-import com.limatech.juriprocessos.services.ProcessService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -33,7 +31,7 @@ public class ProcessServiceTest {
     void shouldCallSaveMethodWhenCreateANewProcess() {
         // given
         CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
-        User user = userDTO.toUserEntity();
+        User user = userDTO.toEntity();
         user.setId(UUID.randomUUID());
 
         CreateProcessDTO processDTO = new CreateProcessDTO(user.getId(), "000", "PE", "TJPE", "1", "vara");
@@ -57,10 +55,10 @@ public class ProcessServiceTest {
     void shouldCallDeleteWhenTryToDeleteAProcess()  {
         // given
         CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
-        User user = userDTO.toUserEntity();
+        User user = userDTO.toEntity();
         user.setId(UUID.randomUUID());
 
-        CreateProcessDTO processDTO = new CreateProcessDTO(userDTO.toUserEntity().getId(), "000", "PE", "TJPE", "1", "vara");
+        CreateProcessDTO processDTO = new CreateProcessDTO(userDTO.toEntity().getId(), "000", "PE", "TJPE", "1", "vara");
         Process process = processDTO.toEntity();
         UUID id = UUID.randomUUID();
         process.setId(id);
@@ -88,11 +86,11 @@ public class ProcessServiceTest {
     void shouldCallSaveMethodWhenUpdateAProcess() {
         // given
         CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
-        User user = userDTO.toUserEntity();
+        User user = userDTO.toEntity();
         user.setId(UUID.randomUUID());
 
-        CreateProcessDTO processDTO = new CreateProcessDTO(userDTO.toUserEntity().getId(), "000", "PE", "TJPE", "1", "vara1");
-        CreateProcessDTO processDTOUpdated = new CreateProcessDTO(userDTO.toUserEntity().getId(), "001", "RS", "TJSP", "2",
+        CreateProcessDTO processDTO = new CreateProcessDTO(userDTO.toEntity().getId(), "000", "PE", "TJPE", "1", "vara1");
+        CreateProcessDTO processDTOUpdated = new CreateProcessDTO(userDTO.toEntity().getId(), "001", "RS", "TJSP", "2",
                 "vara2");
         Process process = processDTO.toEntity();
         Process processUpdated = processDTOUpdated.toEntity();
@@ -133,10 +131,10 @@ public class ProcessServiceTest {
     void shouldCallFindByIdMethodWhenTryToFindAProcess() {
         // given
         CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
-        User user = userDTO.toUserEntity();
+        User user = userDTO.toEntity();
         user.setId(UUID.randomUUID());
 
-        CreateProcessDTO processDTO = new CreateProcessDTO(userDTO.toUserEntity().getId(), "000", "PE", "TJPE", "1", "Vara");
+        CreateProcessDTO processDTO = new CreateProcessDTO(userDTO.toEntity().getId(), "000", "PE", "TJPE", "1", "Vara");
         Process process = processDTO.toEntity();
         UUID id = UUID.randomUUID();
         process.setId(id);
@@ -145,7 +143,7 @@ public class ProcessServiceTest {
         Mockito.when(this.processRepository.findById(id)).thenReturn(Optional.of(process));
 
         // then
-        Process processReturned = this.processService.findProcessById(id);
+        Process processReturned = this.processService.getProcess(id);
         Mockito.verify(this.processRepository).findById(id);
 
         Assertions.assertEquals(processReturned.getCourt(),process.getCourt());

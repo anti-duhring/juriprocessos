@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ public class Process {
     private User user;
 
     @OneToMany(mappedBy = "process", cascade = CascadeType.ALL,  orphanRemoval = true)
-    private List<Activity> activities;
+    private List<Activity> activities = new ArrayList<>();
 
     @NotEmpty
     private String identifier;
@@ -113,5 +114,9 @@ public class Process {
 
     public void setVara(String vara) {
         this.vara = vara;
+    }
+
+    public List<Activity> getActivities() {
+        return activities;
     }
 }

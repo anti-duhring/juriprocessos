@@ -26,7 +26,7 @@ public class UserService {
     public User createUser(CreateUserDTO userDTO) {
         validateIfUserAlreadyExists(userDTO);
 
-        User newUser = userDTO.toUserEntity();
+        User newUser = userDTO.toEntity();
 
         return userRepository.save(newUser);
     }
