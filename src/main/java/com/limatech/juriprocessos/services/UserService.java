@@ -62,6 +62,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User getById(UUID id) {
+
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + "not " +
+                "found"));
+    }
+
     public void validateIfUserAlreadyExists(CreateUserDTO userDTO) {
         Optional<User> userWithThisEmail = userRepository.findByEmail(userDTO.getEmail());
         Optional<User> userWithThisUsername = userRepository.findByUsername(userDTO.getUsername());

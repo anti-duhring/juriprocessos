@@ -194,4 +194,41 @@ class UserServiceTest {
         assertEquals(users, getAll);
     }
 
+
+    @Test
+    void shouldCallFindByIdWhenGettingAUserById() {
+        // given
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService(userRepository);
+
+        CreateUserDTO userDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+
+        User user = userDTO.toEntity();
+
+        UUID id = UUID.randomUUID();
+        user.setId(id);
+
+        // when
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+
+        // then
+        User userReturned = userService.getById(user.getId());
+        assertEquals(user, userReturned);
+    }
+
+    @Test
+    void shouldThrownUserNotFoundExcepetionWhenTryToGetAnInexistentUser() {
+        // given
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService(userRepository);
+
+        UUID id = UUID.randomUUID();
+
+        // when
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(UserNotFoundException.class, () -> userService.getById(id));
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.limatech.juriprocessos.models.process;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 import com.limatech.juriprocessos.models.users.User;
 import jakarta.persistence.*;
@@ -24,6 +25,10 @@ public class Process {
 
     @OneToMany(mappedBy = "process", cascade = CascadeType.ALL,  orphanRemoval = true)
     private List<Activity> activities = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "processes")
+    @JsonIgnore
+    private List<Group> groups = new ArrayList<>();
 
     @NotEmpty
     private String identifier;
