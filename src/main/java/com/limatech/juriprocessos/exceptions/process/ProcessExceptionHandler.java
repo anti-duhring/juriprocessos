@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ProcessExceptionHandler {
 
-    @ExceptionHandler({ProcessNotFoundException.class, ActivityNotFoundException.class})
+    @ExceptionHandler({ProcessNotFoundException.class, ActivityNotFoundException.class, GroupNotFoundException.class})
     public ResponseEntity handle404Error(Exception exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }

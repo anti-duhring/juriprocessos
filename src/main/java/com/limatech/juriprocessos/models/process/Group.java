@@ -48,4 +48,16 @@ public class Group {
     public List<Process> getProcesses() {
         return processes;
     }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

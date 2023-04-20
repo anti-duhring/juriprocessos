@@ -18,4 +18,12 @@ public class CreateGroupDTO {
     public Group toEntity() {
         return new Group(this.name.getName(), this.description.getValue());
     }
+
+    public String getName() {
+        return name.getName();
+    }
+
+    public String getDescription() {
+        return description.getValue();
+    }
 }
