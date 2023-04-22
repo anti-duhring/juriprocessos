@@ -1,9 +1,14 @@
 package com.limatech.juriprocessos.services;
 
+import com.limatech.juriprocessos.dtos.process.ManageProcessToGroupDTO;
 import com.limatech.juriprocessos.dtos.process.CreateGroupDTO;
+import com.limatech.juriprocessos.dtos.process.CreateProcessDTO;
 import com.limatech.juriprocessos.exceptions.process.GroupNotFoundException;
+import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
 import com.limatech.juriprocessos.models.process.Group;
+import com.limatech.juriprocessos.models.process.Process;
 import com.limatech.juriprocessos.repository.process.GroupRepository;
+import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,9 +23,11 @@ public class GroupServiceTest {
 
     GroupRepository groupRepository = Mockito.mock(GroupRepository.class);
 
+    ProcessRepository processRepository = Mockito.mock(ProcessRepository.class);
+
     @BeforeEach
     void setUp() {
-        groupService = new GroupService(groupRepository);
+        groupService = new GroupService(groupRepository, processRepository);
     }
 
     @Test
@@ -135,6 +142,129 @@ public class GroupServiceTest {
         // then
         Assertions.assertThrows(GroupNotFoundException.class, () -> {
             groupService.getGroup(groupId);
+        });
+    }
+
+    @Test
+    void shouldAddProcessToGroup() {
+        // given
+        CreateGroupDTO groupDTO = new CreateGroupDTO("Group test", "Group test description 1 2 3 4 5");
+        Group group = groupDTO.toEntity();
+        group.setId(UUID.randomUUID());
+
+        CreateProcessDTO processDTO = new CreateProcessDTO(null, "000", "PE", "TJPE", "1", "vara");
+        Process process =  processDTO.toEntity();
+        process.setId(UUID.randomUUID());
+
+        ManageProcessToGroupDTO manageProcessToGroupDTO = new ManageProcessToGroupDTO(process.getId());
+
+        // when
+        Mockito.when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+        Mockito.when(processRepository.findById(process.getId())).thenReturn(Optional.of(process));
+        Mockito.when(groupRepository.save(Mockito.any(Group.class))).thenReturn(group);
+
+        Group groupReturned = groupService.addProcess(group.getId(), manageProcessToGroupDTO);
+
+        // then
+        Assertions.assertEquals(groupReturned.getProcesses().size(), 1);
+    }
+
+    @Test
+    void shouldThrowGroupNotFoundExceptionWhenAddingProcessToInexistentGroup() {
+        // given
+        UUID groupId = UUID.randomUUID();
+        ManageProcessToGroupDTO manageProcessToGroupDTO = new ManageProcessToGroupDTO(UUID.randomUUID());
+
+        // when
+        Mockito.when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
+
+        // then
+        Assertions.assertThrows(GroupNotFoundException.class, () -> {
+            groupService.addProcess(groupId, manageProcessToGroupDTO);
+        });
+    }
+
+    @Test
+    void shouldThrowProcessNotFoundExceptionWhenAddingInexistentProcessToGroup() {
+        // given
+        CreateGroupDTO groupDTO = new CreateGroupDTO("Group test", "Group test description 1 2 3 4 5");
+        Group group = groupDTO.toEntity();
+        group.setId(UUID.randomUUID());
+
+        ManageProcessToGroupDTO manageProcessToGroupDTO = new ManageProcessToGroupDTO(UUID.randomUUID());
+
+        // when
+        Mockito.when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+        Mockito.when(processRepository.findById(manageProcessToGroupDTO.getId())).thenReturn(Optional.empty());
+
+        // then
+        Assertions.assertThrows(ProcessNotFoundException.class, () -> {
+            groupService.addProcess(group.getId(), manageProcessToGroupDTO);
+        });
+    }
+
+    @Test
+    void shouldRemoveProcessFromGroup() {
+        // given
+        CreateProcessDTO processDTO = new CreateProcessDTO(null, "000", "PE", "TJPE", "1", "vara");
+        Process process =  processDTO.toEntity();
+        process.setId(UUID.randomUUID());
+
+        CreateGroupDTO groupDTO = new CreateGroupDTO("Group test", "Group test description 1 2 3 4 5");
+        Group group = groupDTO.toEntity();
+        group.setId(UUID.randomUUID());
+        group.addProcess(process);
+
+        ManageProcessToGroupDTO manageProcessToGroupDTO = new ManageProcessToGroupDTO(process.getId());
+
+        // when
+        Mockito.when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+        Mockito.when(processRepository.findById(process.getId())).thenReturn(Optional.of(process));
+        Mockito.when(groupRepository.save(Mockito.any(Group.class))).thenReturn(group);
+
+        Group groupReturned = groupService.removeProcess(group.getId(), manageProcessToGroupDTO);
+
+        // then
+        Assertions.assertEquals(groupReturned.getProcesses().size(), 0);
+    }
+
+    @Test
+
+    void shouldThrowGroupNotFoundExceptionWhenRemovingProcessFromInexistentGroup() {
+        // given
+        UUID groupId = UUID.randomUUID();
+        ManageProcessToGroupDTO manageProcessToGroupDTO = new ManageProcessToGroupDTO(UUID.randomUUID());
+
+        // when
+        Mockito.when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
+
+        // then
+        Assertions.assertThrows(GroupNotFoundException.class, () -> {
+            groupService.removeProcess(groupId, manageProcessToGroupDTO);
+        });
+    }
+
+
+    @Test
+    void shouldThrowProcessNotFoundExceptionWhenRemovingInexistentProcessFromGroup() {
+        // given
+        CreateProcessDTO processDTO = new CreateProcessDTO(null, "000", "PE", "TJPE", "1", "vara");
+        Process process =  processDTO.toEntity();
+        process.setId(UUID.randomUUID());
+
+        CreateGroupDTO groupDTO = new CreateGroupDTO("Group test", "Group test description 1 2 3 4 5");
+        Group group = groupDTO.toEntity();
+        group.setId(UUID.randomUUID());
+
+        ManageProcessToGroupDTO manageProcessToGroupDTO = new ManageProcessToGroupDTO(process.getId());
+
+        // when
+        Mockito.when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
+        Mockito.when(processRepository.findById(manageProcessToGroupDTO.getId())).thenReturn(Optional.empty());
+
+        // then
+        Assertions.assertThrows(ProcessNotFoundException.class, () -> {
+            groupService.removeProcess(group.getId(), manageProcessToGroupDTO);
         });
     }
 }

@@ -60,4 +60,12 @@ public class Group {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void addProcess(Process process) {
+        processes.add(process);
+    }
+
+    public void removeProcess(Process process) {
+        processes.remove(process);
+    }
 }
