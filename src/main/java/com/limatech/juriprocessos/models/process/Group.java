@@ -21,7 +21,11 @@ public class Group {
     @NotEmpty
     private String description;
 
-    @ManyToMany(mappedBy = "groups", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "group_process",
+            joinColumns = @JoinColumn(name = "group_id",  referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "process_id", referencedColumnName = "id")
+    )
     private List<Process> processes = new ArrayList<>();
 
     public Group(String name, String description) {

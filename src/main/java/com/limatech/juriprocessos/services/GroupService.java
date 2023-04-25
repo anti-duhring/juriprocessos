@@ -54,17 +54,18 @@ public class GroupService {
 
     public Group addProcess(UUID id, ManageProcessToGroupDTO manageProcessToGroupDTO) {
         Group group = groupRepository.findById(id).orElseThrow(() -> new GroupNotFoundException("Group not found"));
-        Process process = processRepository.findById(manageProcessToGroupDTO.getId()).orElseThrow(() -> new ProcessNotFoundException(
+        Process process = processRepository.findById(manageProcessToGroupDTO.getProcessId()).orElseThrow(() -> new ProcessNotFoundException(
                 "Process not found"));
 
         group.addProcess(process);
+
         return groupRepository.save(group);
     }
 
     public Group removeProcess(UUID id, ManageProcessToGroupDTO manageProcessToGroupDTO) {
         Group group = groupRepository.findById(id).orElseThrow(() -> new GroupNotFoundException("Group not found"));
         Process process =
-                processRepository.findById(manageProcessToGroupDTO.getId()).orElseThrow(() -> new ProcessNotFoundException("Process not found"));
+                processRepository.findById(manageProcessToGroupDTO.getProcessId()).orElseThrow(() -> new ProcessNotFoundException("Process not found"));
 
         group.removeProcess(process);
         return groupRepository.save(group);

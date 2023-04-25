@@ -52,7 +52,7 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
 
-    @PostMapping("/{id}/addProcess")
+    @PostMapping("/{id}/add-process")
     public ResponseEntity<Group> addProcessToGroup(
             @PathVariable("id") UUID id,
             @RequestBody @Valid ManageProcessToGroupDTO manageProcessToGroupDTO
@@ -61,7 +61,7 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
 
-    @PostMapping("/{id}/removeProcess")
+    @PostMapping("/{id}/remove-process")
     public ResponseEntity<Group> removeProcessToGroup(
             @PathVariable("id") UUID id,
             @RequestBody @Valid ManageProcessToGroupDTO manageProcessToGroupDTO

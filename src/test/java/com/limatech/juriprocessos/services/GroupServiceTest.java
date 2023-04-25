@@ -195,7 +195,7 @@ public class GroupServiceTest {
 
         // when
         Mockito.when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
-        Mockito.when(processRepository.findById(manageProcessToGroupDTO.getId())).thenReturn(Optional.empty());
+        Mockito.when(processRepository.findById(manageProcessToGroupDTO.getProcessId())).thenReturn(Optional.empty());
 
         // then
         Assertions.assertThrows(ProcessNotFoundException.class, () -> {
@@ -260,7 +260,7 @@ public class GroupServiceTest {
 
         // when
         Mockito.when(groupRepository.findById(group.getId())).thenReturn(Optional.of(group));
-        Mockito.when(processRepository.findById(manageProcessToGroupDTO.getId())).thenReturn(Optional.empty());
+        Mockito.when(processRepository.findById(manageProcessToGroupDTO.getProcessId())).thenReturn(Optional.empty());
 
         // then
         Assertions.assertThrows(ProcessNotFoundException.class, () -> {

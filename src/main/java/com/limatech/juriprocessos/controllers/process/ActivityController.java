@@ -37,7 +37,7 @@ public class ActivityController {
             @PathVariable Long id
     ) {
         activityService.deleteActivity(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
 
     }
 

@@ -6,16 +6,20 @@ import java.util.UUID;
 
 public class ManageProcessToGroupDTO {
 
-    private UUID id;
+    private UUID processId;
 
-    public UUID getId() {
-        return id;
+    public ManageProcessToGroupDTO(UUID processId) {
+        validateProcessId(processId);
+
+        this.processId = processId;
     }
 
-    public ManageProcessToGroupDTO(UUID id) {
-        validateProcessId(id);
+    public UUID getProcessId() {
+        return processId;
+    }
 
-        this.id = id;
+    public void setProcessId(UUID processId) {
+        this.processId = processId;
     }
 
     private void validateProcessId(UUID id) {
