@@ -1,9 +1,12 @@
 package com.limatech.juriprocessos.models.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.limatech.juriprocessos.models.process.Group;
 import com.limatech.juriprocessos.models.process.Process;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +31,19 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<Process> processes;
+    private List<Process> processes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Group> groups = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "canRead")
+    @JsonIgnore
+    private List<Group> canRead = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "canWrite")
+    @JsonIgnore
+    private List<Group> canWrite = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -68,6 +83,34 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Process> getProcesses() {
+        return processes;
+    }
+
+    public List<Group> getCanRead() {
+        return canRead;
+    }
+
+    public List<Group> getCanWrite() {
+        return canWrite;
+    }
+
+    public void addGroupToCanWrite(Group group) {
+        this.canWrite.add(group);
+    }
+
+    public void addGroupToCanRead(Group group) {
+        this.canRead.add(group);
+    }
+
+    public void removeGroupFromCanWrite(Group group) {
+        this.canWrite.remove(group);
+    }
+
+    public void removeGroupFromCanRead(Group group) {
+        this.canRead.remove(group);
     }
 
     public User(String username, String name, String email, String password) {

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
+import java.util.UUID;
+
 
 @Entity
 @Table(name = "_activity")
@@ -11,7 +13,7 @@ public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "process_id")
@@ -46,7 +48,7 @@ public class Activity {
         return process;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -66,7 +68,7 @@ public class Activity {
         return date;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

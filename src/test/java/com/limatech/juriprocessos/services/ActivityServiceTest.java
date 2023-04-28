@@ -90,7 +90,7 @@ public class ActivityServiceTest {
         CreateActivityDTO activityDTO = new CreateActivityDTO(processId, "Contestação", "Constestação do requerido",
                 "Contestação", now);
         Activity activity = activityDTO.toEntity();
-        activity.setId(1L);
+        activity.setId(UUID.randomUUID());
 
         // when
         Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
@@ -104,7 +104,7 @@ public class ActivityServiceTest {
     void shouldThrowActivityNotFoundExceptionWhenDeleteInexistentActivity() {
 
         // given
-        Long id = 1L;
+        UUID id = UUID.randomUUID();
 
         // when
         Mockito.when(activityRepository.findById(id)).thenReturn(Optional.empty());
@@ -129,8 +129,9 @@ public class ActivityServiceTest {
          Activity activity = activityDTO.toEntity();
          Activity activityUpdated = activityDTOUpdated.toEntity();
 
-         activity.setId(1L);
-         activityUpdated.setId(1L);
+         UUID id = UUID.randomUUID();
+         activity.setId(id);
+         activityUpdated.setId(id);
 
         // when
         Mockito.when(activityRepository.findById(activity.getId())).thenReturn(Optional.of(activity));
@@ -152,7 +153,7 @@ public class ActivityServiceTest {
     @Test
     void shouldThrowActivityNotFoundExceptionWhenUpdateInexistentActivity() {
         // given
-        Long id = 1L;
+        UUID id = UUID.randomUUID();
 
         // when
         Mockito.when(activityRepository.findById(id)).thenReturn(Optional.empty());
@@ -172,12 +173,14 @@ public class ActivityServiceTest {
         CreateActivityDTO activityDTO = new CreateActivityDTO(processId, "Contestação", "Constestação do requerido",
                 "Contestação", now);
 
+        UUID activityId = UUID.randomUUID();
+
         // when
-        Mockito.when(activityRepository.findById(1L)).thenReturn(Optional.of(activityDTO.toEntity()));
-        Activity activityReturned = activityService.getActivity(1L);
+        Mockito.when(activityRepository.findById(activityId)).thenReturn(Optional.of(activityDTO.toEntity()));
+        Activity activityReturned = activityService.getActivity(activityId);
 
         // then
-        Mockito.verify(activityRepository, Mockito.times(1)).findById(1L);
+        Mockito.verify(activityRepository, Mockito.times(1)).findById(activityId);
 
         Assertions.assertEquals(activityReturned.getName(), activityDTO.getName());
         Assertions.assertEquals(activityReturned.getDescription(), activityDTO.getDescription());
@@ -188,7 +191,7 @@ public class ActivityServiceTest {
     @Test
     void shouldThrowActivityNotFoundExceptionWhenGetInexistentActivity() {
         // given
-        Long id = 1L;
+        UUID id = UUID.randomUUID();
 
         // when
         Mockito.when(activityRepository.findById(id)).thenReturn(Optional.empty());

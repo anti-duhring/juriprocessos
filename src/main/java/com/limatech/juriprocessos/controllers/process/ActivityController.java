@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("${api.url_base}/activity")
 public class ActivityController {
@@ -25,7 +27,7 @@ public class ActivityController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateActivity(
-            @PathVariable Long id,
+            @PathVariable UUID id,
             @RequestBody @Valid CreateActivityDTO activityDTO
     ) {
         Activity activity = activityService.updateActivity(id, activityDTO);
@@ -34,7 +36,7 @@ public class ActivityController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteActivity(
-            @PathVariable Long id
+            @PathVariable UUID id
     ) {
         activityService.deleteActivity(id);
         return ResponseEntity.noContent().build();
@@ -43,7 +45,7 @@ public class ActivityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getActivity(
-            @PathVariable Long id
+            @PathVariable UUID id
     ) {
         Activity activity = activityService.getActivity(id);
         return ResponseEntity.ok(activity);

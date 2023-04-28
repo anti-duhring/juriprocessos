@@ -10,6 +10,8 @@ import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ActivityService {
 
@@ -31,12 +33,12 @@ public class ActivityService {
         return activityRepository.save(activity);
     }
 
-    public void deleteActivity(Long id) {
+    public void deleteActivity(UUID id) {
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new ActivityNotFoundException("Activity not found"));
         activityRepository.deleteById(id);
     }
 
-    public Activity updateActivity(Long id, CreateActivityDTO activityDTO) {
+    public Activity updateActivity(UUID id, CreateActivityDTO activityDTO) {
 
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new ActivityNotFoundException("Activity not found"));
         if(activityDTO.getName() != null) {
@@ -55,7 +57,7 @@ public class ActivityService {
         return activityRepository.save(activity);
     }
 
-    public Activity getActivity(Long id) {
+    public Activity getActivity(UUID id) {
         return activityRepository.findById(id).orElseThrow(() -> new ActivityNotFoundException("Activity not found"));
     }
 }
