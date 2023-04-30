@@ -2,8 +2,8 @@ package com.limatech.juriprocessos.controllers.process;
 
 import com.limatech.juriprocessos.dtos.process.CreateGroupDTO;
 import com.limatech.juriprocessos.dtos.process.ManageProcessToGroupDTO;
-import com.limatech.juriprocessos.models.process.Group;
-import com.limatech.juriprocessos.services.GroupService;
+import com.limatech.juriprocessos.models.process.entity.Group;
+import com.limatech.juriprocessos.services.process.GroupService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

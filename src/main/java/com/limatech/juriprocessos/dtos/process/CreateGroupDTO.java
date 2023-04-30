@@ -1,9 +1,9 @@
 package com.limatech.juriprocessos.dtos.process;
 
-import com.limatech.juriprocessos.models.process.Description;
-import com.limatech.juriprocessos.models.process.Group;
-import com.limatech.juriprocessos.models.process.Name;
-import com.limatech.juriprocessos.models.users.User;
+import com.limatech.juriprocessos.models.process.property.Description;
+import com.limatech.juriprocessos.models.process.entity.Group;
+import com.limatech.juriprocessos.models.process.property.Name;
+import com.limatech.juriprocessos.models.users.entity.User;
 
 import java.util.UUID;
 

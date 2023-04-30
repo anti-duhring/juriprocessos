@@ -1,9 +1,9 @@
 package com.limatech.juriprocessos.dtos.users;
 
-import com.limatech.juriprocessos.models.users.Email;
-import com.limatech.juriprocessos.models.users.Name;
-import com.limatech.juriprocessos.models.users.User;
-import com.limatech.juriprocessos.models.users.Username;
+import com.limatech.juriprocessos.models.users.property.Email;
+import com.limatech.juriprocessos.models.users.property.Name;
+import com.limatech.juriprocessos.models.users.entity.User;
+import com.limatech.juriprocessos.models.users.property.Username;
 
 public class CreateUserDTO {
 

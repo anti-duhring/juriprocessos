@@ -1,4 +1,4 @@
-package com.limatech.juriprocessos.models.users;
+package com.limatech.juriprocessos.models.users.property;
 
 import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 

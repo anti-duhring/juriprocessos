@@ -1,6 +1,6 @@
-package com.limatech.juriprocessos.models.process;
+package com.limatech.juriprocessos.models.process.entity;
 
-import com.limatech.juriprocessos.models.users.User;
+import com.limatech.juriprocessos.models.users.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 

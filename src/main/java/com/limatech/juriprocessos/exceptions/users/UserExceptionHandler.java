@@ -18,8 +18,8 @@ public class UserExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity handle404Error(UserNotFoundException exception) {
+    @ExceptionHandler({UserNotFoundException.class, TaskNotFoundException.class})
+    public ResponseEntity handle404Error(Exception exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 }

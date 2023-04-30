@@ -1,9 +1,8 @@
-package com.limatech.juriprocessos.models.users;
+package com.limatech.juriprocessos.models.process.property;
 
 import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 
-public class Name extends UserProperty{
-
+public class Name extends ProcessProperty{
     private String name;
 
     public Name(String name) {

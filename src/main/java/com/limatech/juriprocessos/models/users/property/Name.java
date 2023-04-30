@@ -1,25 +1,24 @@
-package com.limatech.juriprocessos.models.process;
+package com.limatech.juriprocessos.models.users.property;
 
 import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 
-public class Description extends ProcessProperty{
-    private String value;
+public class Name extends UserProperty{
 
-    private final int maxLength = 255;
+    private String name;
 
-    public Description(String value) {
+    public Name(String name) {
 
-        setValue(value);
+        setName(name);
     }
 
-    public String getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
 
-    public void setValue(String value) {
-        validate(value);
+    public void setName(String name) {
+        validate(name);
 
-        this.value = value;
+        this.name = name;
     }
 
     public void validate(String value) {

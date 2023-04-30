@@ -1,10 +1,10 @@
-package com.limatech.juriprocessos.services;
+package com.limatech.juriprocessos.services.process;
 
 import com.limatech.juriprocessos.dtos.process.CreateProcessDTO;
 import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
-import com.limatech.juriprocessos.models.process.Process;
-import com.limatech.juriprocessos.models.users.User;
+import com.limatech.juriprocessos.models.process.entity.Process;
+import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import com.limatech.juriprocessos.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

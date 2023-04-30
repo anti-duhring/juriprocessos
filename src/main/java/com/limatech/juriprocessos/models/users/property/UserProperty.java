@@ -1,6 +1,6 @@
-package com.limatech.juriprocessos.models.process;
+package com.limatech.juriprocessos.models.users.property;
 
-public abstract class ProcessProperty {
+public abstract class UserProperty {
     private final int maxLength = 70;
 
     private final int minLength = 5;
@@ -19,3 +19,4 @@ public abstract class ProcessProperty {
         return property.length() < minLength;
     }
 }
+

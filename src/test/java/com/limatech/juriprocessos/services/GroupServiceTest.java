@@ -6,19 +6,18 @@ import com.limatech.juriprocessos.dtos.process.CreateGroupDTO;
 import com.limatech.juriprocessos.dtos.process.CreateProcessDTO;
 import com.limatech.juriprocessos.exceptions.process.GroupNotFoundException;
 import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
-import com.limatech.juriprocessos.models.process.Group;
-import com.limatech.juriprocessos.models.process.Process;
-import com.limatech.juriprocessos.models.users.User;
+import com.limatech.juriprocessos.models.process.entity.Group;
+import com.limatech.juriprocessos.models.process.entity.Process;
+import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.process.GroupRepository;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import com.limatech.juriprocessos.repository.users.UserRepository;
-import org.hibernate.mapping.Any;
+import com.limatech.juriprocessos.services.process.GroupService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class GroupServiceTest {

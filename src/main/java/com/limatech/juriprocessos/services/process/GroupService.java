@@ -1,21 +1,20 @@
-package com.limatech.juriprocessos.services;
+package com.limatech.juriprocessos.services.process;
 
 import com.limatech.juriprocessos.dtos.process.AddAndRemoveUserToGroupDTO;
-import com.limatech.juriprocessos.dtos.process.ManageProcessToGroupDTO;
 import com.limatech.juriprocessos.dtos.process.CreateGroupDTO;
+import com.limatech.juriprocessos.dtos.process.ManageProcessToGroupDTO;
 import com.limatech.juriprocessos.exceptions.process.GroupNotFoundException;
 import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
-import com.limatech.juriprocessos.models.process.Group;
-import com.limatech.juriprocessos.models.process.Process;
-import com.limatech.juriprocessos.models.users.User;
+import com.limatech.juriprocessos.models.process.entity.Group;
+import com.limatech.juriprocessos.models.process.entity.Process;
+import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.process.GroupRepository;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import com.limatech.juriprocessos.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,9 +26,10 @@ public class GroupService {
     private final UserRepository userRepository;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository, ProcessRepository processRepositoy, UserRepository userRepository) {
+    public GroupService(GroupRepository groupRepository, ProcessRepository processRepository,
+                        UserRepository userRepository) {
         this.groupRepository = groupRepository;
-        this.processRepository = processRepositoy;
+        this.processRepository = processRepository;
         this.userRepository = userRepository;
     }
 

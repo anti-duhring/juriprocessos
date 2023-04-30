@@ -1,9 +1,9 @@
-package com.limatech.juriprocessos.services;
+package com.limatech.juriprocessos.services.user;
 
 import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
 import com.limatech.juriprocessos.exceptions.users.UserAlreadyExistsException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
-import com.limatech.juriprocessos.models.users.User;
+import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

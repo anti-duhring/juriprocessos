@@ -1,6 +1,6 @@
 package com.limatech.juriprocessos.repository.users;
 
-import com.limatech.juriprocessos.models.users.User;
+import com.limatech.juriprocessos.models.users.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

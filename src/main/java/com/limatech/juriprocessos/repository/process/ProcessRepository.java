@@ -1,6 +1,6 @@
 package com.limatech.juriprocessos.repository.process;
 
-import com.limatech.juriprocessos.models.process.Process;
+import com.limatech.juriprocessos.models.process.entity.Process;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

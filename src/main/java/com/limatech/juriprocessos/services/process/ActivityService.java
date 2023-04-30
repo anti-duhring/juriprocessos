@@ -1,10 +1,10 @@
-package com.limatech.juriprocessos.services;
+package com.limatech.juriprocessos.services.process;
 
 import com.limatech.juriprocessos.dtos.process.CreateActivityDTO;
 import com.limatech.juriprocessos.exceptions.process.ActivityNotFoundException;
 import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
-import com.limatech.juriprocessos.models.process.Activity;
-import com.limatech.juriprocessos.models.process.Process;
+import com.limatech.juriprocessos.models.process.entity.Activity;
+import com.limatech.juriprocessos.models.process.entity.Process;
 import com.limatech.juriprocessos.repository.process.ActivityRepository;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import org.springframework.beans.factory.annotation.Autowired;

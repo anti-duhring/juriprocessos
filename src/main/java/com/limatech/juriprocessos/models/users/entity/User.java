@@ -1,8 +1,8 @@
-package com.limatech.juriprocessos.models.users;
+package com.limatech.juriprocessos.models.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.limatech.juriprocessos.models.process.Group;
-import com.limatech.juriprocessos.models.process.Process;
+import com.limatech.juriprocessos.models.process.entity.Group;
+import com.limatech.juriprocessos.models.process.entity.Process;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -45,6 +45,10 @@ public class User {
     @JsonIgnore
     private List<Group> canWrite = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Task> tasks = new ArrayList<>();
+
     public UUID getId() {
         return id;
     }
@@ -53,9 +57,6 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -69,48 +70,9 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Process> getProcesses() {
-        return processes;
-    }
-
-    public List<Group> getCanRead() {
-        return canRead;
-    }
-
-    public List<Group> getCanWrite() {
-        return canWrite;
-    }
-
-    public void addGroupToCanWrite(Group group) {
-        this.canWrite.add(group);
-    }
-
-    public void addGroupToCanRead(Group group) {
-        this.canRead.add(group);
-    }
-
-    public void removeGroupFromCanWrite(Group group) {
-        this.canWrite.remove(group);
-    }
-
-    public void removeGroupFromCanRead(Group group) {
-        this.canRead.remove(group);
     }
 
     public User(String username, String name, String email, String password) {

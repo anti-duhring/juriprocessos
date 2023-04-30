@@ -1,11 +1,10 @@
 package com.limatech.juriprocessos.controllers.users;
 
 import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
-import com.limatech.juriprocessos.models.users.User;
-import com.limatech.juriprocessos.services.UserService;
+import com.limatech.juriprocessos.models.users.entity.User;
+import com.limatech.juriprocessos.services.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

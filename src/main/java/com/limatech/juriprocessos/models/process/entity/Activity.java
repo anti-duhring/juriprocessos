@@ -1,4 +1,4 @@
-package com.limatech.juriprocessos.models.process;
+package com.limatech.juriprocessos.models.process.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

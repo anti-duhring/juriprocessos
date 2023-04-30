@@ -1,8 +1,8 @@
 package com.limatech.juriprocessos.controllers.process;
 
 import com.limatech.juriprocessos.dtos.process.CreateActivityDTO;
-import com.limatech.juriprocessos.models.process.Activity;
-import com.limatech.juriprocessos.services.ActivityService;
+import com.limatech.juriprocessos.models.process.entity.Activity;
+import com.limatech.juriprocessos.services.process.ActivityService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

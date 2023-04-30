@@ -1,7 +1,7 @@
 package com.limatech.juriprocessos.dtos.process;
 
-import com.limatech.juriprocessos.models.process.Activity;
-import com.limatech.juriprocessos.models.process.Process;
+import com.limatech.juriprocessos.models.process.entity.Activity;
+import com.limatech.juriprocessos.models.process.entity.Process;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
