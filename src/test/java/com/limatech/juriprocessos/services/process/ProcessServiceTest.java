@@ -1,4 +1,4 @@
-package com.limatech.juriprocessos.services;
+package com.limatech.juriprocessos.services.process;
 
 import com.limatech.juriprocessos.dtos.process.CreateProcessDTO;
 import com.limatech.juriprocessos.dtos.users.CreateUserDTO;

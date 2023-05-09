@@ -72,4 +72,40 @@ public class Task {
     public Process getProcess() {
         return process;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDeadlineAt(LocalDateTime deadlineAt) {
+        this.deadlineAt = deadlineAt;
+    }
+
+    public void setProcess(Process process) {
+        this.process = process;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getStartAt() {
+        return startAt;
+    }
+
+    public LocalDateTime getFinishAt() {
+        return finishAt;
+    }
+
+    public void setFinishAt(LocalDateTime finishAt) {
+        this.finishAt = finishAt;
+    }
+
+    public void setStartAt(LocalDateTime startAt) {
+        this.startAt = startAt;
+    }
 }

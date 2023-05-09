@@ -1,4 +1,4 @@
-package com.limatech.juriprocessos.services;
+package com.limatech.juriprocessos.services.process;
 
 import com.limatech.juriprocessos.dtos.process.AddAndRemoveUserToGroupDTO;
 import com.limatech.juriprocessos.dtos.process.ManageProcessToGroupDTO;

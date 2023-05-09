@@ -1,4 +1,4 @@
-package com.limatech.juriprocessos.services;
+package com.limatech.juriprocessos.services.user;
 
 import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
 import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;

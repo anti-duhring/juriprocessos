@@ -1,6 +1,7 @@
 package com.limatech.juriprocessos.services.user;
 
 import com.limatech.juriprocessos.dtos.process.CreateTaskDTO;
+import com.limatech.juriprocessos.dtos.users.ManageTaskDTO;
 import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
 import com.limatech.juriprocessos.exceptions.users.TaskNotFoundException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
@@ -47,5 +48,47 @@ public class TaskService {
     public void deleteTask(UUID taskId) {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId.toString()));
         taskRepository.deleteById(taskId);
+    }
+
+    public Task updateTask(UUID taskId, ManageTaskDTO taskDTO) {
+        Task taskToBeUpdated = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId.toString()));
+
+        if(!taskDTO.getName().isBlank()) {
+            taskToBeUpdated.setName(taskDTO.getName());
+        }
+
+        if(!taskDTO.getDescription().isBlank()) {
+            taskToBeUpdated.setDescription(taskDTO.getDescription());
+        }
+
+        if(taskDTO.getDeadlineAt() != null) {
+            taskToBeUpdated.setDeadlineAt(taskDTO.getDeadlineAt());
+        }
+
+        if(taskDTO.getProcessId() != null) {
+            Process process = processRepository.findById(taskDTO.getProcessId()).orElseThrow(() -> new ProcessNotFoundException(
+                    "Process not found"));
+            taskToBeUpdated.setProcess(process);
+        }
+
+        if(taskDTO.getUserId() != null) {
+            User user = userRepository.findById(taskDTO.getUserId()).orElseThrow(() -> new UserNotFoundException("User " +
+                    "not found"));
+            taskToBeUpdated.setUser(user);
+        }
+
+        if(taskDTO.getStartAt() != null) {
+            taskToBeUpdated.setStartAt(taskDTO.getStartAt());
+        }
+
+        if(taskDTO.getFinishAt() != null) {
+            taskToBeUpdated.setFinishAt(taskDTO.getFinishAt());
+        }
+
+        return taskRepository.save(taskToBeUpdated);
+    }
+
+    public Task getTask(UUID taskId) {
+        return taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId.toString()));
     }
 }
