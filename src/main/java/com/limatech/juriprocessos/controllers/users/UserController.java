@@ -1,7 +1,10 @@
 package com.limatech.juriprocessos.controllers.users;
 
-import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
+import com.limatech.juriprocessos.dtos.users.LoginUserResponseDTO;
+import com.limatech.juriprocessos.dtos.users.RegisterUserRequestDTO;
+import com.limatech.juriprocessos.dtos.users.LoginUserRequestDTO;
 import com.limatech.juriprocessos.models.users.entity.User;
+import com.limatech.juriprocessos.services.misc.JwtService;
 import com.limatech.juriprocessos.services.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +20,38 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping
-    public ResponseEntity addUser(
-            @RequestBody @Valid CreateUserDTO userDTO
+    @Autowired
+    JwtService jwtService;
+
+    @PostMapping(path = "/auth/register")
+    public ResponseEntity<LoginUserResponseDTO> addUser(
+            @RequestBody @Valid RegisterUserRequestDTO userDTO
     ) {
         User user = userService.createUser(userDTO);
-        return ResponseEntity.ok(user);
+        String token = jwtService.generateToken(user);
+
+        LoginUserResponseDTO loginUserResponseDTO = new LoginUserResponseDTO(token, user);
+
+        return ResponseEntity.ok(loginUserResponseDTO);
+    }
+
+    @PostMapping(path = "/auth/login")
+    public ResponseEntity login(
+            @RequestBody @Valid LoginUserRequestDTO userDTO
+            ) {
+        User user = userService.authenticateUser(userDTO);
+        String token = jwtService.generateToken(user);
+
+        LoginUserResponseDTO loginUserResponseDTO = new LoginUserResponseDTO(token, user);
+
+        return ResponseEntity.ok(loginUserResponseDTO);
+
     }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity updateUser(
             @PathVariable("id") UUID id,
-            @RequestBody @Valid CreateUserDTO userDTO
+            @RequestBody @Valid RegisterUserRequestDTO userDTO
     ) {
         User user = userService.updateUser(id, userDTO);
         return ResponseEntity.ok(user);

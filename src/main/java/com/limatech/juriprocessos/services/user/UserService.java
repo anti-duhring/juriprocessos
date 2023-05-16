@@ -1,11 +1,16 @@
 package com.limatech.juriprocessos.services.user;
 
-import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
+import com.limatech.juriprocessos.dtos.users.LoginUserRequestDTO;
+import com.limatech.juriprocessos.dtos.users.RegisterUserRequestDTO;
 import com.limatech.juriprocessos.exceptions.users.UserAlreadyExistsException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
+import com.limatech.juriprocessos.models.users.entity.Role;
 import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,21 +22,38 @@ public class UserService {
 
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
-    public User createUser(CreateUserDTO userDTO) {
+    public User createUser(RegisterUserRequestDTO userDTO) {
         validateIfUserAlreadyExists(userDTO);
 
         User newUser = userDTO.toEntity();
+        newUser.setAuthorities(Role.USER);
 
         return userRepository.save(newUser);
     }
 
-    public User updateUser(UUID id, CreateUserDTO userDTO) {
+    public User authenticateUser(LoginUserRequestDTO userDTO) {
+        this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.password)
+        );
+
+        User user =
+                userRepository.findByUsername(userDTO.getUsername()).orElseThrow(() -> new UserNotFoundException(
+                        "User " + userDTO.getUsername() + " not found"));
+
+        return user;
+    }
+
+    public User updateUser(UUID id, RegisterUserRequestDTO userDTO) {
         validateIfUserAlreadyExists(userDTO);
 
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not " +
@@ -68,7 +90,7 @@ public class UserService {
                 "found"));
     }
 
-    public void validateIfUserAlreadyExists(CreateUserDTO userDTO) {
+    public void validateIfUserAlreadyExists(RegisterUserRequestDTO userDTO) {
         Optional<User> userWithThisEmail = userRepository.findByEmail(userDTO.getEmail());
         Optional<User> userWithThisUsername = userRepository.findByUsername(userDTO.getUsername());
 

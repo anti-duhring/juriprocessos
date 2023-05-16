@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String email;
 
     @NotEmpty
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -91,6 +92,10 @@ public class User implements UserDetails {
 
     public User() {
 
+    }
+
+    public void setAuthorities(Role role) {
+        this.role = role;
     }
 
     @Override

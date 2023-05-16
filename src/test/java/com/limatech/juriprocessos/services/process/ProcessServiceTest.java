@@ -1,13 +1,12 @@
 package com.limatech.juriprocessos.services.process;
 
 import com.limatech.juriprocessos.dtos.process.CreateProcessDTO;
-import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
+import com.limatech.juriprocessos.dtos.users.RegisterUserRequestDTO;
 import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
 import com.limatech.juriprocessos.models.process.entity.Process;
 import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import com.limatech.juriprocessos.repository.users.UserRepository;
-import com.limatech.juriprocessos.services.process.ProcessService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ public class ProcessServiceTest {
     @Test
     void shouldCallSaveMethodWhenCreateANewProcess() {
         // given
-        CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
         User user = userDTO.toEntity();
         user.setId(UUID.randomUUID());
 
@@ -55,7 +54,7 @@ public class ProcessServiceTest {
     @Test
     void shouldCallDeleteWhenTryToDeleteAProcess()  {
         // given
-        CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
         User user = userDTO.toEntity();
         user.setId(UUID.randomUUID());
 
@@ -86,7 +85,7 @@ public class ProcessServiceTest {
     @Test
     void shouldCallSaveMethodWhenUpdateAProcess() {
         // given
-        CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
         User user = userDTO.toEntity();
         user.setId(UUID.randomUUID());
 
@@ -131,7 +130,7 @@ public class ProcessServiceTest {
     @Test
     void shouldCallFindByIdMethodWhenTryToFindAProcess() {
         // given
-        CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
         User user = userDTO.toEntity();
         user.setId(UUID.randomUUID());
 

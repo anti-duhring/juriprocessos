@@ -1,16 +1,16 @@
 package com.limatech.juriprocessos.services.user;
 
-import com.limatech.juriprocessos.dtos.users.CreateUserDTO;
+import com.limatech.juriprocessos.dtos.users.RegisterUserRequestDTO;
 import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 import com.limatech.juriprocessos.exceptions.users.UserAlreadyExistsException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
 import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.users.UserRepository;
-import com.limatech.juriprocessos.services.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,8 @@ class UserServiceTest {
 
     UserService userService;
 
+    PasswordEncoder passwordEncoder;
+
     @Mock
     UserRepository userRepository;
 
@@ -31,16 +33,16 @@ class UserServiceTest {
     void setup() {
 
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        this.userService = new UserService(userRepository);
+        this.userService = new UserService(userRepository, passwordEncoder, authenticationManager);
     }
 
     @Test
     void shouldThrowUserAlreadyExistsExceptionWhenEmailAlreadyExists() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
-        CreateUserDTO userDTO = new CreateUserDTO("john.de","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.de","John Dee", "john@example.com", "password");
         User user = new User("john.de", "John", "john@example.com", "password");
         Optional<User> optionalUser = Optional.of(user);
 
@@ -55,9 +57,9 @@ class UserServiceTest {
     void shouldThrowUserAlreadyExistsExceptionWhenUsernameAlreadyExists() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
-        CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
         User user = new User("john.de", "John", "john@example.com", "password");
         Optional<User> optionalUser = Optional.of(user);
 
@@ -73,7 +75,7 @@ class UserServiceTest {
     void shouldThrowInvalidPropertyExceptionWhenEmailIsInvalid() {
 
         assertThrows(InvalidPropertyException.class, () -> {
-            CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "johndee", "password");
+            RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.dee","John Dee", "johndee", "password");
         });
     }
 
@@ -81,7 +83,7 @@ class UserServiceTest {
     void shouldThrowUserNotFoundExceptionWhenTryToDeleteInexistentUser() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
         UUID id = UUID.randomUUID();
 
@@ -93,9 +95,9 @@ class UserServiceTest {
     void shouldCallDeleteUserById() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
-        CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
         User user = userDTO.toEntity();
         UUID id = UUID.randomUUID();
 
@@ -114,10 +116,10 @@ class UserServiceTest {
     void shouldCallSaveMethodWhenUpdateUser() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
-        CreateUserDTO userDTO = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
-        CreateUserDTO userUpdatedDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userUpdatedDTO = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
 
         User user = userDTO.toEntity();
         User userUpdated = userUpdatedDTO.toEntity();
@@ -138,9 +140,9 @@ class UserServiceTest {
     void shouldThrownUserNotFoundExcepetionWhenTryToUpdateAnInexistentUser() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
-        CreateUserDTO userUpdatedDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+        RegisterUserRequestDTO userUpdatedDTO = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
 
         User userUpdated = userUpdatedDTO.toEntity();
         UUID id = UUID.randomUUID();
@@ -158,9 +160,9 @@ class UserServiceTest {
     void shouldCallSaveUserWhenCreateANewUser() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
-        CreateUserDTO userDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
         User user = userDTO.toEntity();
 
         // when
@@ -175,10 +177,10 @@ class UserServiceTest {
     void shouldCallFindByIdWhenGettingAUser() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
-        CreateUserDTO userDTOOne = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
-        CreateUserDTO userDTOTwo = new CreateUserDTO("john.dee","John Dee", "john@example.com", "password");
+        RegisterUserRequestDTO userDTOOne = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+        RegisterUserRequestDTO userDTOTwo = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
 
         User userOne = userDTOOne.toEntity();
         User userTwo = userDTOTwo.toEntity();
@@ -200,9 +202,9 @@ class UserServiceTest {
     void shouldCallFindByIdWhenGettingAUserById() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
-        CreateUserDTO userDTO = new CreateUserDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
 
         User user = userDTO.toEntity();
 
@@ -221,7 +223,7 @@ class UserServiceTest {
     void shouldThrownUserNotFoundExcepetionWhenTryToGetAnInexistentUser() {
         // given
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
 
         UUID id = UUID.randomUUID();
 

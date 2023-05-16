@@ -2,6 +2,7 @@ package com.limatech.juriprocessos.config;
 
 import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,6 +18,8 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    @Value("${api.url_base}/user/auth/**")
+    private String authenticationUrl;
 
     @Autowired
     public SecurityConfiguration(JwtAuthenticationFilter  jwtAuthFilter, AuthenticationProvider authenticationProvider) {
@@ -31,7 +34,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("")
+                .requestMatchers("/api/v1/user/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -4,8 +4,10 @@ import com.limatech.juriprocessos.models.users.property.Email;
 import com.limatech.juriprocessos.models.users.property.Name;
 import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.models.users.property.Username;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class CreateUserDTO {
+public class RegisterUserRequestDTO {
 
     private Username username;
 
@@ -18,11 +20,11 @@ public class CreateUserDTO {
 
     private String password;
 
-    public CreateUserDTO(String username, String name, String email, String password) {
+    public RegisterUserRequestDTO(String username, String name, String email, String password) {
         this.username = new Username(username);
         this.name = new Name(name);
         this.email = new Email(email);
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
     public String getUsername() {
@@ -65,6 +67,6 @@ public class CreateUserDTO {
 
     public User toEntity() {
 
-        return new User(username.getName(), name.getName(), email.getAddress(), password);
+        return new User(username.getName(), name.getName(), email.getAddress(), new BCryptPasswordEncoder().encode(password));
     }
 }

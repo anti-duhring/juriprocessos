@@ -21,7 +21,7 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${api.secret_key}")
-    private static String secretKey;
+    private String secretKey;
 
     // 3 days
     private static final Integer expirationDay = 1000 * 60 * 60 * 72;
@@ -77,7 +77,7 @@ public class JwtService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(this.secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
