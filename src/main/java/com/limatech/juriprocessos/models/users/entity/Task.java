@@ -108,4 +108,8 @@ public class Task {
     public void setStartAt(LocalDateTime startAt) {
         this.startAt = startAt;
     }
+
+    public UUID getId() {
+        return id;
+    }
 }

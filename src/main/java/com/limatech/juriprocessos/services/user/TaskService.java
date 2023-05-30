@@ -1,8 +1,9 @@
 package com.limatech.juriprocessos.services.user;
 
-import com.limatech.juriprocessos.dtos.process.CreateTaskDTO;
+import com.limatech.juriprocessos.dtos.users.CreateTaskDTO;
 import com.limatech.juriprocessos.dtos.users.ManageTaskDTO;
 import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
+import com.limatech.juriprocessos.exceptions.users.ForbiddenActionException;
 import com.limatech.juriprocessos.exceptions.users.TaskNotFoundException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
 import com.limatech.juriprocessos.models.process.entity.Process;
@@ -11,13 +12,16 @@ import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import com.limatech.juriprocessos.repository.users.TaskRepository;
 import com.limatech.juriprocessos.repository.users.UserRepository;
+import com.limatech.juriprocessos.services.interfaces.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
-public class TaskService {
+public class TaskService implements UserValidation {
 
     private final TaskRepository taskRepository;
 
@@ -46,6 +50,8 @@ public class TaskService {
     }
 
     public void deleteTask(UUID taskId) {
+        validateUserPermission(taskId);
+
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId.toString()));
         taskRepository.deleteById(taskId);
     }
@@ -90,5 +96,16 @@ public class TaskService {
 
     public Task getTask(UUID taskId) {
         return taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId.toString()));
+    }
+
+    @Override
+    public void validateUserPermission(UUID taskId) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Task> tasks = currentUser.getTasks();
+        List<UUID> UUIDs = tasks.stream().map(Task::getId).toList();
+
+        if(!UUIDs.contains(taskId)) {
+            throw new ForbiddenActionException();
+        }
     }
 }

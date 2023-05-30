@@ -22,4 +22,9 @@ public class UserExceptionHandler {
     public ResponseEntity handle404Error(Exception exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
+
+    @ExceptionHandler({ ForbiddenActionException.class})
+    public ResponseEntity handle403Error(Exception exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
+    }
 }

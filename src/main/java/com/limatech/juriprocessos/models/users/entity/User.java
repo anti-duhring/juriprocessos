@@ -98,6 +98,10 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.name()));

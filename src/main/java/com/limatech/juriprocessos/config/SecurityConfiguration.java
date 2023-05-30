@@ -18,7 +18,7 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    @Value("${api.url_base}/user/auth/**")
+    @Value("/${api.url_base}/user/auth/**")
     private String authenticationUrl;
 
     @Autowired
@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/user/auth/**")
+                .requestMatchers(authenticationUrl)
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -1,6 +1,6 @@
 package com.limatech.juriprocessos.services.user;
 
-import com.limatech.juriprocessos.dtos.process.CreateTaskDTO;
+import com.limatech.juriprocessos.dtos.users.CreateTaskDTO;
 import com.limatech.juriprocessos.dtos.users.ManageTaskDTO;
 import com.limatech.juriprocessos.exceptions.process.ProcessNotFoundException;
 import com.limatech.juriprocessos.exceptions.users.TaskNotFoundException;
@@ -11,7 +11,6 @@ import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
 import com.limatech.juriprocessos.repository.users.TaskRepository;
 import com.limatech.juriprocessos.repository.users.UserRepository;
-import com.limatech.juriprocessos.services.user.TaskService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

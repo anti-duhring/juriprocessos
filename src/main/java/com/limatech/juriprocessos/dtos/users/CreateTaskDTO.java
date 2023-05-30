@@ -1,4 +1,4 @@
-package com.limatech.juriprocessos.dtos.process;
+package com.limatech.juriprocessos.dtos.users;
 
 import com.limatech.juriprocessos.models.process.entity.Process;
 import com.limatech.juriprocessos.models.process.property.Description;
@@ -7,6 +7,7 @@ import com.limatech.juriprocessos.models.users.entity.Task;
 import com.limatech.juriprocessos.models.users.entity.User;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class CreateTaskDTO {
@@ -25,12 +26,14 @@ public class CreateTaskDTO {
 
     private LocalDateTime deadlineAt;
 
-    public CreateTaskDTO(UUID userId, UUID processId, String name, String description, LocalDateTime deadlineAt) {
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public CreateTaskDTO(UUID userId, UUID processId, String name, String description, String deadlineAt) {
         this.userId = userId;
         this.processId = processId;
         this.name = new Name(name);
         this.description = new Description(description);
-        this.deadlineAt = deadlineAt;
+        this.deadlineAt = LocalDateTime.parse(deadlineAt, formatter);
     }
 
     public Task toEntity() {
