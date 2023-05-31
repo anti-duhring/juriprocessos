@@ -7,6 +7,7 @@ import com.limatech.juriprocessos.models.users.entity.Task;
 import com.limatech.juriprocessos.models.users.entity.User;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class ManageTaskDTO {
@@ -25,15 +26,17 @@ public class ManageTaskDTO {
 
     private LocalDateTime deadlineAt;
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public ManageTaskDTO(UUID userId, UUID processId, String name, String description, LocalDateTime startedAt,
-                         LocalDateTime finishAt, LocalDateTime deadlineAt) {
+                         LocalDateTime finishAt, String deadlineAt) {
         this.userId = userId;
         this.processId = processId;
         this.name = new Name(name);
         this.description = new Description(description);
         this.startAt = startedAt;
         this.finishAt = finishAt;
-        this.deadlineAt = deadlineAt;
+        this.deadlineAt = LocalDateTime.parse(deadlineAt, formatter);
     }
 
     public ManageTaskDTO() {

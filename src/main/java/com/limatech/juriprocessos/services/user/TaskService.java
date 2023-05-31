@@ -98,6 +98,10 @@ public class TaskService implements UserValidation {
         return taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId.toString()));
     }
 
+    // TODO: Fix exception when try to delete task by using this validateUserPermission method "failed to lazily
+    //  initialize a collection of role:
+    //  com.limatech
+    //  .juriprocessos.models.users.entity.User.tasks: could not initialize proxy - no Session"
     @Override
     public void validateUserPermission(UUID taskId) {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
