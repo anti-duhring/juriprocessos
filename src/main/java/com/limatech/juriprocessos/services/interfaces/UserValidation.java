@@ -11,11 +11,13 @@ public interface UserValidation {
     void validateUserPermission(UUID id);
 
     default void validateUserAdminPermission() {
-        boolean isUserAdmin =
-                SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(role -> role.toString().equals(Role.ADMIN.toString()));
-
-        if(!isUserAdmin) {
+        if(!isUserAdmin()) {
             throw new ForbiddenActionException();
         }
     };
+
+    default boolean isUserAdmin() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(role -> role.toString().equals(Role.ADMIN.toString()));
+    }
+
 }

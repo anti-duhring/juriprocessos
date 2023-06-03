@@ -38,6 +38,8 @@ public class TaskService implements UserValidation {
     }
 
     public Task createTask(CreateTaskDTO taskDTO) {
+        validateUserPermission(taskDTO);
+
         User user = userRepository.findById(taskDTO.getUserId()).orElseThrow(() -> new UserNotFoundException("User " +
                 "not found"));
         Process process =
@@ -58,6 +60,8 @@ public class TaskService implements UserValidation {
     }
 
     public Task updateTask(UUID taskId, ManageTaskDTO taskDTO) {
+        validateUserPermission(taskId);
+
         Task taskToBeUpdated = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId.toString()));
 
         if(!taskDTO.getName().isBlank()) {
@@ -112,7 +116,16 @@ public class TaskService implements UserValidation {
         List<Task> tasks = currentUserWithTasks.getTasks();
         List<UUID> ids = tasks.stream().map(Task::getId).toList();
 
-        if(!ids.contains(taskId)) {
+        if(!ids.contains(taskId) && !isUserAdmin()) {
+            throw new ForbiddenActionException();
+        }
+    }
+
+    public void validateUserPermission(CreateTaskDTO taskDTO) {
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UUID currentUserId = currentUser.getId();
+
+        if(!taskDTO.getUserId().toString().equals(currentUserId.toString()) && !isUserAdmin()) {
             throw new ForbiddenActionException();
         }
     }
