@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService implements UserValidation {
@@ -95,20 +96,23 @@ public class TaskService implements UserValidation {
     }
 
     public Task getTask(UUID taskId) {
+        validateUserPermission(taskId);
         return taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId.toString()));
     }
 
-    // TODO: Fix exception when try to delete task by using this validateUserPermission method "failed to lazily
-    //  initialize a collection of role:
-    //  com.limatech
-    //  .juriprocessos.models.users.entity.User.tasks: could not initialize proxy - no Session"
     @Override
     public void validateUserPermission(UUID taskId) {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Task> tasks = currentUser.getTasks();
-        List<UUID> UUIDs = tasks.stream().map(Task::getId).toList();
+        UUID currentUserId = currentUser.getId();
 
-        if(!UUIDs.contains(taskId)) {
+        User currentUserWithTasks =
+                userRepository.findById(currentUserId).orElseThrow(() -> new UserNotFoundException("Current user not " +
+                        "found"));
+
+        List<Task> tasks = currentUserWithTasks.getTasks();
+        List<UUID> ids = tasks.stream().map(Task::getId).toList();
+
+        if(!ids.contains(taskId)) {
             throw new ForbiddenActionException();
         }
     }

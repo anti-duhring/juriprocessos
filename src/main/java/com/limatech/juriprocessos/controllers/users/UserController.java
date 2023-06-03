@@ -44,6 +44,7 @@ public class UserController {
 
         LoginUserResponseDTO loginUserResponseDTO = new LoginUserResponseDTO(token, user);
 
+
         return ResponseEntity.ok(loginUserResponseDTO);
 
     }

@@ -32,7 +32,6 @@ public class User implements UserDetails {
     private String email;
 
     @NotEmpty
-    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -102,6 +101,10 @@ public class User implements UserDetails {
         return tasks;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role.name()));
@@ -136,4 +139,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

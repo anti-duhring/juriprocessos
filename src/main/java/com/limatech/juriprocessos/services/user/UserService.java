@@ -42,6 +42,7 @@ public class UserService implements UserValidation {
 
         User newUser = userDTO.toEntity();
         newUser.setAuthorities(Role.USER);
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         return userRepository.save(newUser);
     }
