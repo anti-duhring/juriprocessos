@@ -38,6 +38,7 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Process> processes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
@@ -141,4 +142,7 @@ public class User implements UserDetails {
     }
 
 
+    public List<Process> getProcesses() {
+        return this.processes;
+    }
 }

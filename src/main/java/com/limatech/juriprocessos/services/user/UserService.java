@@ -119,10 +119,8 @@ public class UserService implements UserValidation {
     @Override
     public void validateUserPermission(UUID userId) {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        boolean isUserAdmin =
-                SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(role -> role.toString().equals(Role.ADMIN.toString()));
 
-        if(!userId.toString().equals(currentUser.getId().toString()) && !isUserAdmin) {
+        if(!userId.toString().equals(currentUser.getId().toString()) && !isUserAdmin()) {
             throw new ForbiddenActionException();
         }
     }
