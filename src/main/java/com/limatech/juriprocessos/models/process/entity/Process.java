@@ -124,4 +124,7 @@ public class Process {
         this.vara = vara;
     }
 
+    public List<Group> getGroups() {
+        return groups;
+    }
 }

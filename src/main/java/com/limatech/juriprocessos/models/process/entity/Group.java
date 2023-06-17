@@ -121,4 +121,7 @@ public class Group {
         return canWrite;
     }
 
+    public User getUser() {
+        return user;
+    }
 }

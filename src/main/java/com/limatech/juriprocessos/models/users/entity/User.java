@@ -145,4 +145,8 @@ public class User implements UserDetails {
     public List<Process> getProcesses() {
         return this.processes;
     }
+
+    public List<Group> getCanWrite() {
+        return canWrite;
+    }
 }

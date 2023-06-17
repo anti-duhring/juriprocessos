@@ -8,7 +8,6 @@ import com.limatech.juriprocessos.models.process.entity.Activity;
 import com.limatech.juriprocessos.models.process.entity.Process;
 import com.limatech.juriprocessos.repository.process.ActivityRepository;
 import com.limatech.juriprocessos.repository.process.ProcessRepository;
-import com.limatech.juriprocessos.services.process.ActivityService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ public class ActivityServiceTest {
 
     @BeforeEach
     void setUp() {
-        activityService = new ActivityService(this.activityRepository, this.processRepository);
+        activityService = new ActivityService(this.activityRepository, this.processRepository, userRepository);
     }
 
     @Test
