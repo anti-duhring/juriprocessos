@@ -112,24 +112,4 @@ public class ActivityService implements UserValidation {
             throw new ForbiddenActionException();
         }
     }
-
-    public boolean userCanWriteOnProcess(User user, Process process) {
-        List<Group> groupsThatUserCanWrite = user.getCanWrite();
-        List<UUID> groupsThatUserCanWriteIds = groupsThatUserCanWrite.stream().map(Group::getId).toList();
-
-        List<Group> groupsFromProcess = process.getGroups();
-        List<UUID> groupsFromProcessIds = groupsFromProcess.stream().map(Group::getId).toList();
-
-        if(process.getUser().getId().toString().equals(user.getId().toString())) {
-            return true;
-        }
-
-        for (UUID uuid : groupsThatUserCanWriteIds) {
-            if (groupsFromProcessIds.contains(uuid)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

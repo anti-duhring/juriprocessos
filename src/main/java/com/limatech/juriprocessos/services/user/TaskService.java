@@ -124,8 +124,14 @@ public class TaskService implements UserValidation {
     public void validateUserPermission(CreateTaskDTO taskDTO) {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UUID currentUserId = currentUser.getId();
+        User userFromDb  = userRepository.findById(taskDTO.getUserId()).orElseThrow(() -> new UserNotFoundException(
+                "User not found"));
 
-        if(!taskDTO.getUserId().toString().equals(currentUserId.toString()) && !isUserAdmin()) {
+        Process process =
+                processRepository.findById(taskDTO.getProcessId()).orElseThrow(() -> new ProcessNotFoundException(
+                        "Process not found"));
+
+        if(!taskDTO.getUserId().toString().equals(currentUserId.toString()) && !isUserAdmin() && !userCanWriteOnProcess(userFromDb, process)) {
             throw new ForbiddenActionException();
         }
     }
