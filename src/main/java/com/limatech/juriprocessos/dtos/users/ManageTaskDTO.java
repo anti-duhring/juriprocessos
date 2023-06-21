@@ -74,4 +74,12 @@ public class ManageTaskDTO {
     public LocalDateTime getDeadlineAt() {
         return deadlineAt;
     }
+
+    public void setProcessId(UUID processId) {
+        this.processId = processId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
 }

@@ -90,7 +90,7 @@ public class ActivityService implements UserValidation {
         if(
                 !process.getUser().getId().toString().equals(currentUserId.toString()) &&
                 !userCanWriteOnProcess(currentUserFromDB, process) &&
-                !this.isUserAdmin()
+                !this.isUserAdmin(currentUserFromContext)
         ) {
             throw new ForbiddenActionException();
         }
@@ -107,7 +107,7 @@ public class ActivityService implements UserValidation {
         if(
                 !process.getUser().getId().toString().equals(currentUserId.toString()) &&
                 !userCanWriteOnProcess(currentUserFromDB, process) &&
-                !this.isUserAdmin()
+                !this.isUserAdmin(currentUser)
         ) {
             throw new ForbiddenActionException();
         }

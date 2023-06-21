@@ -4,12 +4,12 @@ import com.limatech.juriprocessos.dtos.users.RegisterUserRequestDTO;
 import com.limatech.juriprocessos.exceptions.users.InvalidPropertyException;
 import com.limatech.juriprocessos.exceptions.users.UserAlreadyExistsException;
 import com.limatech.juriprocessos.exceptions.users.UserNotFoundException;
+import com.limatech.juriprocessos.models.users.entity.Role;
 import com.limatech.juriprocessos.models.users.entity.User;
 import com.limatech.juriprocessos.repository.users.UserRepository;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class UserServiceTest {
-
-    UserService userService;
 
     PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
 
@@ -37,9 +37,12 @@ class UserServiceTest {
 
     User contextUser = Instancio.create(User.class);
 
+    UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
+
     @BeforeEach
-    void setup() {
-        this.userService = new UserService(userRepository, passwordEncoder, authenticationManager);
+    void restartContextUserData() {
+        contextUser.setAuthorities(Role.USER);
+        contextUser.setId(UUID.randomUUID());
 
         // Auth context setup
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -179,66 +182,63 @@ class UserServiceTest {
         userService.createUser(userDTO);
         Mockito.verify(userRepository).save(Mockito.any(User.class));
     }
-//
-//    @Test
-//    void shouldCallFindByIdWhenGettingAUser() {
-//        // given
-//        UserRepository userRepository = Mockito.mock(UserRepository.class);
-//        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
-//
-//        RegisterUserRequestDTO userDTOOne = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
-//        RegisterUserRequestDTO userDTOTwo = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
-//
-//        User userOne = userDTOOne.toEntity();
-//        User userTwo = userDTOTwo.toEntity();
-//
-//        List<User> users = new ArrayList<User>();
-//        users.add(userOne);
-//        users.add(userTwo);
-//
-//        // when
-//        when(userRepository.findAll()).thenReturn(users);
-//
-//        // then
-//        List<User> getAll = userService.getAll();
-//        assertEquals(users, getAll);
-//    }
-//
-//
-//    @Test
-//    void shouldCallFindByIdWhenGettingAUserById() {
-//        // given
-//        UserRepository userRepository = Mockito.mock(UserRepository.class);
-//        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
-//
-//        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
-//
-//        User user = userDTO.toEntity();
-//
-//        UUID id = UUID.randomUUID();
-//        user.setId(id);
-//
-//        // when
-//        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-//
-//        // then
-//        User userReturned = userService.getById(user.getId());
-//        assertEquals(user, userReturned);
-//    }
-//
-//    @Test
-//    void shouldThrownUserNotFoundExcepetionWhenTryToGetAnInexistentUser() {
-//        // given
-//        UserRepository userRepository = Mockito.mock(UserRepository.class);
-//        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
-//
-//        UUID id = UUID.randomUUID();
-//
-//        // when
-//        when(userRepository.findById(id)).thenReturn(Optional.empty());
-//
-//        // then
-//        assertThrows(UserNotFoundException.class, () -> userService.getById(id));
-//    }
+
+    @Test
+    void shouldCallFindByIdWhenGettingAUser() {
+        RegisterUserRequestDTO userDTOOne = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+        RegisterUserRequestDTO userDTOTwo = new RegisterUserRequestDTO("john.dee","John Dee", "john@example.com", "password");
+
+        User userOne = userDTOOne.toEntity();
+        User userTwo = userDTOTwo.toEntity();
+
+        List<User> users = new ArrayList<User>();
+        users.add(userOne);
+        users.add(userTwo);
+
+        contextUser.setAuthorities(Role.ADMIN);
+
+        // when
+        when(userRepository.findAll()).thenReturn(users);
+
+        // then
+        List<User> getAll = userService.getAll();
+        assertEquals(users, getAll);
+    }
+
+
+    @Test
+    void shouldCallFindByIdWhenGettingAUserById() {
+
+        RegisterUserRequestDTO userDTO = new RegisterUserRequestDTO("foo.bar","Foo Bar", "foo@example.com", "password");
+
+        User user = userDTO.toEntity();
+
+        UUID id = UUID.randomUUID();
+        user.setId(id);
+        contextUser.setId(id);
+
+        // when
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+
+        // then
+        User userReturned = userService.getById(user.getId());
+        assertEquals(user, userReturned);
+    }
+
+    @Test
+    void shouldThrownUserNotFoundExcepetionWhenTryToGetAnInexistentUser() {
+        // given
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService(userRepository, passwordEncoder, authenticationManager);
+
+        UUID id = UUID.randomUUID();
+        contextUser.setId(id);
+
+        // when
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(UserNotFoundException.class, () -> userService.getById(id));
+    }
 
 }

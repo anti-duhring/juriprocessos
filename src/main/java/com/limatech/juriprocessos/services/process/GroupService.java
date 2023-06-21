@@ -138,7 +138,7 @@ public class GroupService implements UserValidation {
 
         Group group = groupRepository.findById(id).orElseThrow(() -> new GroupNotFoundException("Group not found"));
 
-        if (!id.toString().equals(currentUserId.toString()) && !this.userCanWriteOnGroup(userFromDb, group) && !this.isUserAdmin()) {
+        if (!id.toString().equals(currentUserId.toString()) && !this.userCanWriteOnGroup(userFromDb, group) && !this.isUserAdmin(currentUser)) {
             throw new ForbiddenActionException();
         }
     }
@@ -147,7 +147,7 @@ public class GroupService implements UserValidation {
         User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UUID currentUserId = currentUser.getId();
 
-        if (!groupDTO.getUserId().toString().equals(currentUserId.toString()) && !this.isUserAdmin()) {
+        if (!groupDTO.getUserId().toString().equals(currentUserId.toString()) && !this.isUserAdmin(currentUser)) {
             throw new ForbiddenActionException();
         }
     }
@@ -160,7 +160,7 @@ public class GroupService implements UserValidation {
         Group group = groupRepository.findById(groupDTO.getGroupId()).orElseThrow(() -> new GroupNotFoundException("Group not found"));
         User userOwnerOfGroup = group.getUser();
 
-        if (!userOwnerOfGroup.getId().toString().equals(currentUserId.toString()) && !this.userCanWriteOnGroup(userFromDb, group) && !this.isUserAdmin()) {
+        if (!userOwnerOfGroup.getId().toString().equals(currentUserId.toString()) && !this.userCanWriteOnGroup(userFromDb, group) && !this.isUserAdmin(currentUser)) {
             throw new ForbiddenActionException();
         }
     }

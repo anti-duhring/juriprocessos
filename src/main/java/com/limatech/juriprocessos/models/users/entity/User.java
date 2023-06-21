@@ -149,4 +149,8 @@ public class User implements UserDetails {
     public List<Group> getCanWrite() {
         return canWrite;
     }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
 }

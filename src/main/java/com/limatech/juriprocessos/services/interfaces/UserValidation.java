@@ -14,14 +14,8 @@ public interface UserValidation {
 
     void validateUserPermission(UUID id);
 
-    default void validateUserAdminPermission() {
-        if(!isUserAdmin()) {
-            throw new ForbiddenActionException();
-        }
-    };
-
-    default boolean isUserAdmin() {
-        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(role -> role.toString().equals(Role.ADMIN.toString()));
+    default boolean isUserAdmin(User user) {
+        return user.getAuthorities().stream().anyMatch(role -> role.toString().equals(Role.ADMIN.toString()));
     }
 
     default boolean userCanWriteOnProcess(User user, Process process) {

@@ -116,7 +116,7 @@ public class TaskService implements UserValidation {
         List<Task> tasks = currentUserWithTasks.getTasks();
         List<UUID> ids = tasks.stream().map(Task::getId).toList();
 
-        if(!ids.contains(taskId) && !isUserAdmin()) {
+        if(!ids.contains(taskId) && !isUserAdmin(currentUser)) {
             throw new ForbiddenActionException();
         }
     }
@@ -131,7 +131,7 @@ public class TaskService implements UserValidation {
                 processRepository.findById(taskDTO.getProcessId()).orElseThrow(() -> new ProcessNotFoundException(
                         "Process not found"));
 
-        if(!taskDTO.getUserId().toString().equals(currentUserId.toString()) && !isUserAdmin() && !userCanWriteOnProcess(userFromDb, process)) {
+        if(!taskDTO.getUserId().toString().equals(currentUserId.toString()) && !isUserAdmin(currentUser) && !userCanWriteOnProcess(userFromDb, process)) {
             throw new ForbiddenActionException();
         }
     }

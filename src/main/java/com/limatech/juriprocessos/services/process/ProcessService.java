@@ -88,7 +88,7 @@ public class ProcessService implements UserValidation {
         List<UUID> processesID = processes.stream().map(Process::getId).toList();
 
         System.out.println(processesID.size());
-        if(!processesID.contains(id) && !isUserAdmin()) {
+        if(!processesID.contains(id) && !isUserAdmin(currentUser)) {
             throw new ForbiddenActionException();
         }
     }
@@ -100,7 +100,7 @@ public class ProcessService implements UserValidation {
         UUID currentUserId = currentUser.getId();
 
 
-        if(!userFromProcess.toString().equals(currentUserId.toString()) && !isUserAdmin()) {
+        if(!userFromProcess.toString().equals(currentUserId.toString()) && !isUserAdmin(currentUser)) {
             throw new ForbiddenActionException();
         }
 

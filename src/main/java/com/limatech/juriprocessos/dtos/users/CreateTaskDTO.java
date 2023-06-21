@@ -81,4 +81,16 @@ public class CreateTaskDTO {
     public Process getProcess() {
         return process;
     }
+
+    public void setDeadlineAt(LocalDateTime deadline) {
+        this.deadlineAt = deadline;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public void setProcessId(UUID processId) {
+        this.processId = processId;
+    }
 }
