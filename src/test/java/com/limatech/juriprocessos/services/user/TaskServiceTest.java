@@ -185,96 +185,105 @@ public class TaskServiceTest {
         Assertions.assertEquals(taskUpdatedReturned.getFinishAt(), taskUpdated.getFinishAt());
         Assertions.assertEquals(taskUpdatedReturned.getDeadlineAt(), taskUpdated.getDeadlineAt());
     }
-//
-//    @Test
-//    void shouldThrowTaskNotFoundWhenTryToUpdateATaskThatDoesNotExist() {
-//        // given
-//        UUID id = UUID.randomUUID();
-//
-//        // when
-//        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.empty());
-//
-//        // then
-//        Assertions.assertThrows(TaskNotFoundException.class, () -> taskService.updateTask(id, new ManageTaskDTO()));
-//    }
-//
-//    @Test
-//    void shouldThrowUserNotFoundWhenTryToUpdateATaskToInexistentUser() {
-//        // given
-//        UUID id = UUID.randomUUID();
-//        UUID userId = UUID.randomUUID();
-//        UUID processId = UUID.randomUUID();
-//
-//        ManageTaskDTO taskDTO = new ManageTaskDTO(
-//                userId,
-//                processId,
-//                "Task name",
-//                "Description",
-//                null,
-//                null,
-//                null
-//        );
-//
-//        // when
-//        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(new Task()));
-//        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.empty());
-//        Mockito.when(processRepository.findById(processId)).thenReturn(Optional.of(new Process()));
-//        Mockito.when(taskRepository.save(Mockito.any(Task.class))).thenReturn(taskDTO.toEntity());
-//
-//        // then
-//        Assertions.assertThrows(UserNotFoundException.class, () -> taskService.updateTask(id, taskDTO));
-//
-//    }
-//    @Test
-//    void shouldThrowProcessNotFoundWhenTryToUpdateATaskToInexistentProcess() {
-//        // given
-//        UUID id = UUID.randomUUID();
-//        UUID userId = UUID.randomUUID();
-//        UUID processId = UUID.randomUUID();
-//
-//        ManageTaskDTO taskDTO = new ManageTaskDTO(
-//                userId,
-//                processId,
-//                "Task name",
-//                "Description",
-//                null,
-//                null,
-//                null
-//        );
-//
-//        // when
-//        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(new Task()));
-//        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
-//        Mockito.when(processRepository.findById(processId)).thenReturn(Optional.empty());
-//        Mockito.when(taskRepository.save(Mockito.any(Task.class))).thenReturn(taskDTO.toEntity());
-//
-//        // then
-//        Assertions.assertThrows(ProcessNotFoundException.class, () -> taskService.updateTask(id, taskDTO));
-//
-//    }
-//
-//    @Test
-//    void shouldCallFindByIdWhenGetTask() {
-//        // given
-//        UUID id = UUID.randomUUID();
-//
-//        // when
-//        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(new Task()));
-//        taskService.getTask(id);
-//
-//        // then
-//        Mockito.verify(taskRepository, Mockito.times(1)).findById(id);
-//    }
-//
-//    @Test
-//    void shouldThrowTaskNotFoundWhenTryToGetATaskThatDoesNotExist() {
-//        // given
-//        UUID id = UUID.randomUUID();
-//
-//        // when
-//        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.empty());
-//
-//        // then
-//        Assertions.assertThrows(TaskNotFoundException.class, () -> taskService.getTask(id));
-//    }
+
+    @Test
+    void shouldThrowTaskNotFoundWhenTryToUpdateATaskThatDoesNotExist() {
+        // given
+        UUID id = UUID.randomUUID();
+        Task taskFromContextUser = Instancio.create(Task.class);
+        taskFromContextUser.setId(id);
+
+        contextUser.setTasks(List.of(taskFromContextUser));
+
+        // when
+        Mockito.when(userRepository.findById(contextUser.getId())).thenReturn(Optional.of(contextUser));
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.empty());
+
+        // then
+        Assertions.assertThrows(TaskNotFoundException.class, () -> taskService.updateTask(id, new ManageTaskDTO()));
+    }
+
+    @Test
+    void shouldThrowUserNotFoundWhenTryToUpdateATaskToInexistentUser() {
+        // given
+        UUID id = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID processId = UUID.randomUUID();
+
+        ManageTaskDTO taskDTO = Instancio.create(ManageTaskDTO.class);
+        taskDTO.setProcessId(processId);
+        taskDTO.setUserId(userId);
+
+        // when
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(new Task()));
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        Mockito.when(processRepository.findById(processId)).thenReturn(Optional.of(new Process()));
+        Mockito.when(taskRepository.save(Mockito.any(Task.class))).thenReturn(taskDTO.toEntity());
+
+        // then
+        Assertions.assertThrows(UserNotFoundException.class, () -> taskService.updateTask(id, taskDTO));
+
+    }
+    @Test
+    void shouldThrowProcessNotFoundWhenTryToUpdateATaskToInexistentProcess() {
+        // given
+        UUID id = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+        UUID processId = UUID.randomUUID();
+
+        ManageTaskDTO taskDTO = Instancio.create(ManageTaskDTO.class);
+        taskDTO.setProcessId(processId);
+        taskDTO.setUserId(userId);
+
+        Task taskEntity = taskDTO.toEntity();
+        taskEntity.setId(id);
+
+        contextUser.setTasks(List.of(taskEntity));
+        // when
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(taskEntity));
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
+        Mockito.when(userRepository.findById(contextUser.getId())).thenReturn(Optional.of(contextUser));
+        Mockito.when(processRepository.findById(processId)).thenReturn(Optional.empty());
+        Mockito.when(taskRepository.save(Mockito.any(Task.class))).thenReturn(taskEntity);
+
+        // then
+        Assertions.assertThrows(ProcessNotFoundException.class, () -> taskService.updateTask(id, taskDTO));
+
+    }
+
+    @Test
+    void shouldCallFindByIdWhenGetTask() {
+        // given
+        UUID id = UUID.randomUUID();
+        Task task = Instancio.create(Task.class);
+        task.setId(id);
+
+        contextUser.setTasks(List.of(task));
+
+        // when
+        Mockito.when(userRepository.findById(contextUser.getId())).thenReturn(Optional.of(contextUser));
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(task));
+        taskService.getTask(id);
+
+        // then
+        Mockito.verify(taskRepository, Mockito.times(1)).findById(id);
+    }
+
+    @Test
+    void shouldThrowTaskNotFoundWhenTryToGetATaskThatDoesNotExist() {
+        // given
+        UUID id = UUID.randomUUID();
+
+        Task taskFromContextUser = Instancio.create(Task.class);
+        taskFromContextUser.setId(id);
+
+        contextUser.setTasks(List.of(taskFromContextUser));
+
+        // when
+        Mockito.when(userRepository.findById(contextUser.getId())).thenReturn(Optional.of(contextUser));
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.empty());
+
+        // then
+        Assertions.assertThrows(TaskNotFoundException.class, () -> taskService.getTask(id));
+    }
 }
